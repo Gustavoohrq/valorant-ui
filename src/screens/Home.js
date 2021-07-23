@@ -5,6 +5,8 @@ import { View, Text } from 'react-native'
 import api from '../services/api'
 import categoryList from '../utils/categories';
 import agentsList from '../utils/agents';
+import { BlurView } from 'expo-blur';
+
 
 
 
@@ -25,11 +27,26 @@ export default function Home() {
     return (
 
       <Agent>
-        <Card >
+        <CardAgent backgroundColor={item.backgroundColor} >
           <AgentAvatar source={{ uri: item.fullPortrait }} />
-          <Title>{item.displayName}</Title>
-          <Type>{item.role.displayName}</Type>
-        </Card>
+          <Footer backgroundColor={item.backgroundColor} >
+          <BlurView intensity={90} style={{ width: '100%', height: '100%', borderRadius: 50, alignItems: 'center', paddingTop: 10}}>
+            <Title>{item.displayName}</Title>
+            <View
+                style={{
+                  borderBottomColor: 'white',
+                  borderBottomWidth: 1,
+                  width: 100,
+                  marginBottom: 5
+                }}
+            />
+            <Type>{item.role.displayName}</Type>
+        </BlurView>
+
+          </Footer>
+          
+          
+        </CardAgent>
       </Agent>
 
 
@@ -39,7 +56,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(false)
     async function getDataApi() {
-      setAgents(agentsList)
+      setAgents(agentsList.data)
     }
     getDataApi()
     setTimeout(() => {
@@ -93,8 +110,8 @@ const Container = styled.SafeAreaView`
 const LoadingImage = styled.Image``
 
 const Logo = styled.Image`
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   padding: 16px 0;
 `;
 
@@ -105,7 +122,16 @@ const Header = styled.View`
     margin: 16px 16px 32px 16px;
 
 `;
+const Footer = styled.View`
+  position: absolute;
+  top: 72%;
+  align-items: center;
+  width: 250px;
+  height: 100;
+  z-index: 99;
+  background-color: transparent
 
+  `;
 
 const Categories = styled.View`
     margin-top:32px;
@@ -136,23 +162,46 @@ const CategoryDot = styled.View`
 
 
 const Agents = styled.FlatList`
-    margin-top: 32px;
-    flex: 1;
+    margin-top: 30px;
 `;
 
 const Agent = styled.TouchableOpacity`
+    margin: 10px;
+    height: 350;
+
+
 `
 
 const Title = styled.Text`
-color: white;
-font-size: 15px;
+  color: white;
+  font-size: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'bold';
+  letter-spacing: 2px;
+  
+
 `
 
 const Type = styled.Text`
 color: white;
-font-size: 15px;
+font-size: 10px;
+text-transform: uppercase;
+  font-family: 'bold';
 `
 
-const AgentAvatar = styled.Image``
+const AgentAvatar = styled.Image`
+  width: 350px;
+  height: 400;
+  position: absolute;
+  top: -75.7;
+`
 
-const Card = styled.View``
+const CardAgent = styled.View`
+  width: 250px;
+  height: 350;
+  margin-top: 40px;
+  border-radius: 15px;
+  align-items: center;
+
+`
