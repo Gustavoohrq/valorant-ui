@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { Feather } from '@expo/vector-icons'
-import { View } from 'react-native'
+import { View, ActivityIndicator } from 'react-native'
 import api from '../services/api'
 import categoryList from '../utils/categories';
 import agentsList from '../utils/agents';
 import { BlurView } from 'expo-blur';
+
 
 
 
@@ -26,9 +27,8 @@ export default function Home() {
   }
   const _weaponsItem = (item) => {
     return (
-
       <Weapon >
-          <WeaponImage style={{resizeMode: 'contain'}} source={{ uri: item.skins[0].displayIcon ? item.skins[0].displayIcon  :  item.skins[0].chromas[0].displayIcon}} />
+          <WeaponImage  style={{resizeMode: 'contain'}} source={{ uri: item.skins[0].displayIcon ? item.skins[0].displayIcon  :  item.skins[0].chromas[0].displayIcon}} />
           <FooterWeapon>
             <BlurView intensity={80} style={{ width: '100%', height: '100%', borderRadius: 10, alignItems: 'center', paddingTop: 10, overflow: 'hidden' }}>
               <TitleWeapon>{item.displayName}</TitleWeapon>
@@ -64,12 +64,18 @@ export default function Home() {
   } 
 
   const _agentItem = (item) => {
- 
+
     return (
 
       <Agent>
-        <CardAgent backgroundColor={item.backgroundColor} >
-          <AgentAvatar source={{ uri: item.fullPortrait }} />
+        
+        <CardAgent  backgroundColor={item.backgroundColor} >
+          <AgentAvatar 
+          source={{ uri: item.fullPortrait }}
+          onLoadStart={() => console.log('onLoadStart') }
+          onLoadEnd={() => console.log('onLoadEnd')}
+           />
+           {/* {loadingg && <ActivityIndicator />} */}
           <Footer backgroundColor={item.backgroundColor} >
             <BlurView intensity={90} style={{ width: '100%', height: '100%', borderBottomLeftRadius: 10, alignItems: 'center', paddingTop: 10, overflow: 'hidden' }}>
               <Title>{item.displayName}</Title>
@@ -105,7 +111,7 @@ export default function Home() {
     getDataApi()
     setTimeout(() => {
       setLoading(true)
-    }, 3000);
+    }, 5000);
 
   }, [])
 
