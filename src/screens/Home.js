@@ -16,18 +16,32 @@ export default function Home() {
   const [maps, setMaps] = useState([''])
   const [weapons, setWeapons] = useState([''])
   const [loading, setLoading] = useState(false)
-
   const agentsRef = useRef()
   const mapsRef = useRef()
+  const weaponsRef = useRef()
   const changeCategory = (category) => {
     setSelectedCategory(category)
     console.log(category)
     // agentsRef.current.scrollToOffset({ x: 0, y: 0 });
   }
+  const _weaponsItem = (item) => {
+    return (
+
+      <Weapon >
+          <WeaponImage style={{resizeMode: 'contain'}} source={{ uri: item.skins[0].displayIcon ? item.skins[0].displayIcon  :  item.skins[0].chromas[0].displayIcon}} />
+          <FooterWeapon>
+            <BlurView intensity={80} style={{ width: '100%', height: '100%', borderRadius: 10, alignItems: 'center', paddingTop: 10, overflow: 'hidden' }}>
+              <TitleWeapon>{item.displayName}</TitleWeapon>
+            </BlurView>
+          </FooterWeapon> 
+      </Weapon>
+
+
+    )
+  }
 
   const _mapsItem = (item) => {
     return (
-
       <Map>
           <MapImage source={{ uri: item.splash }} />
           <FooterMaps>
@@ -116,6 +130,7 @@ export default function Home() {
       <>
         {loading ?
           <>
+              
             { selectedCategory === "Agentes" ? 
             
               <Agents
@@ -131,13 +146,20 @@ export default function Home() {
                 <Maps
                   data={maps}
                   showsVerticalScrollIndicator={false}
-
                   keyExtractor={item => item.uuid}
                   renderItem={({ item }) => _mapsItem(item)}
                   ref={mapsRef}
                 /> 
               
-              :  <></>
+              : selectedCategory === "Armas" ? 
+                <Weapons
+                  showsHorizontalScrollIndicator={false}
+                  data={weapons}
+                  keyExtractor={item => item.uuid}
+                  renderItem={({ item }) => _weaponsItem(item)}
+                  ref={weaponsRef}
+                />
+              : <></>
             }
           </>
           :
@@ -211,6 +233,50 @@ const CategoryDot = styled.View`
 
 const Agents = styled.FlatList`
     margin-top: 30px;
+`;
+const Weapons = styled.FlatList`
+  margin-left: 30px;
+  margin-right: 30px;
+  top: 40px
+
+`;
+
+const Weapon = styled.TouchableOpacity`
+  height: 150;
+  width: 300;
+  margin-top: 30px;
+  margin-bottom: 80px;
+  border-radius: 10px;
+  align-items: center;
+  align-self: center;
+  background: #263440;
+
+`
+const TitleWeapon = styled.Text`
+  color: white;
+  font-size: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'bold';
+  letter-spacing: 2px;
+
+`
+
+const WeaponImage = styled.Image`
+  height: 80;
+  width: 300;
+  transform: rotate(20deg);
+  border-radius: 10px;
+`;
+
+const FooterWeapon = styled.View`
+  position: absolute;
+  align-items: center;
+  align-self: center;
+  width: 200px;
+  height: 50;
+  z-index: 99;
+  top: 80%;
 `;
 
 const Maps = styled.FlatList`
