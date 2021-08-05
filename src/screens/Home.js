@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { Feather } from '@expo/vector-icons'
-import { View, ActivityIndicator } from 'react-native'
+import { View,  } from 'react-native'
 import api from '../services/api'
 import categoryList from '../utils/categories';
 import agentsList from '../utils/agents';
 import { BlurView } from 'expo-blur';
+import Text from '../components/Text'
 
-
-
-
-
-export default function Home() {
+export default function Home({ navigation }) {
   const [selectedCategory, setSelectedCategory] = useState("Agentes")
   const [agents, setAgents] = useState([''])
   const [maps, setMaps] = useState([''])
@@ -25,10 +22,11 @@ export default function Home() {
     console.log(category)
     // agentsRef.current.scrollToOffset({ x: 0, y: 0 });
   }
+
   const _weaponsItem = (item) => {
     return (
       <Weapon >
-          <WeaponImage  style={{resizeMode: 'contain'}} source={{ uri: item.skins[0].displayIcon ? item.skins[0].displayIcon  :  item.skins[0].chromas[0].displayIcon}} />
+          <WeaponImage  style={{resizeMode: 'contain'}} source={{ uri: item.displayIcon }} />
           <FooterWeapon>
             <BlurView intensity={80} style={{ width: '100%', height: '100%', borderRadius: 10, alignItems: 'center', paddingTop: 10, overflow: 'hidden' }}>
               <TitleWeapon>{item.displayName}</TitleWeapon>
@@ -46,7 +44,7 @@ export default function Home() {
           <MapImage source={{ uri: item.splash }} />
           <FooterMaps>
             <BlurView intensity={90} style={{ width: '100%', height: '100%', borderRadius: 10, alignItems: 'center', paddingTop: 10, overflow: 'hidden' }}>
-              <Title>{item.displayName}</Title>
+              <Text title heavy>{item.displayName}</Text>
               <View
                   style={{
                     borderBottomColor: 'white',
@@ -64,21 +62,15 @@ export default function Home() {
   } 
 
   const _agentItem = (item) => {
-
     return (
-
-      <Agent>
-        
+      <Agent onPress={() => navigation.navigate("Agent", { agent: item })}>
         <CardAgent  backgroundColor={item.backgroundColor} >
           <AgentAvatar 
-          source={{ uri: item.fullPortrait }}
-          onLoadStart={() => console.log('onLoadStart') }
-          onLoadEnd={() => console.log('onLoadEnd')}
-           />
-           {/* {loadingg && <ActivityIndicator />} */}
+            source={{ uri: item.fullPortrait }}
+          />
           <Footer backgroundColor={item.backgroundColor} >
             <BlurView intensity={90} style={{ width: '100%', height: '100%', borderBottomLeftRadius: 10, alignItems: 'center', paddingTop: 10, overflow: 'hidden' }}>
-              <Title>{item.displayName}</Title>
+              <Text title heavy>{item.displayName}</Text>
               <View
                   style={{
                     borderBottomColor: 'white',
@@ -87,13 +79,11 @@ export default function Home() {
                     marginBottom: 5
                   }}
               />
-              <Type>{item.role.displayName}</Type>
+              <Text medium bold>{item.role.displayName}</Text>
             </BlurView>
           </Footer> 
         </CardAgent>
       </Agent>
-
-
     )
   }
 
@@ -146,6 +136,11 @@ export default function Home() {
                 keyExtractor={item => item.uuid}
                 renderItem={({ item }) => _agentItem(item)}
                 ref={agentsRef}
+                removeClippedSubviews={true} // Unmount components when outside of window 
+                initialNumToRender={2} // Reduce initial render amount
+                maxToRenderPerBatch={1} // Reduce number in each render batch
+                updateCellsBatchingPeriod={100} // Increase time between renders
+                windowSize={7}
               />
 
               : selectedCategory === "Mapas"  ?
