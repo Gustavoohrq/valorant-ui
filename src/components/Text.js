@@ -8,16 +8,18 @@ export default TextStyle = ({...props }) => {
 const Text = styled.Text`
     font-family: "Avenir Next";
     color: ${props => props.color ?? "#ffffff"};
-    ${({ title, large, medium, small }) => {
+    ${({ title, large, medium, small, textAlign }) => {
         switch (true) {
             case title:
                 return 'font-size: 36px; text-transform: uppercase;letter-spacing: 2px';
             case large:
-                return 'font-size: 20px';
+                return 'font-size: 20px; margin-bottom: 10px';
             case medium:
                 return `font-size: 16px`;
             case small:
-                return `font-size: 13px`;
+                return `font-size: 13px;margin-top:5px`;
+            case textAlign:
+                return `font-size: 16px; text-align: justify`;
             default:
                 return `font-size: 14px`;
         }
