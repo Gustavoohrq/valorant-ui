@@ -7,7 +7,10 @@ import categoryList from '../utils/categories';
 import agentsList from '../utils/agents';
 import { BlurView } from 'expo-blur';
 import Text from '../components/Text'
-
+import load from '../assets/load.gif'
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 export default function Home({ navigation }) {
   const [selectedCategory, setSelectedCategory] = useState("Agentes")
   const [agents, setAgents] = useState([''])
@@ -110,7 +113,7 @@ export default function Home({ navigation }) {
       <Header>
         <View></View>
         <Logo source={{ uri: 'https://img.icons8.com/color/452/valorant.png' }} />
-        <Feather name="user" size={24} color="#ffffff" />
+        <View></View>
       </Header>
       <Categories>
         {categoryList.map((category, index) => {
@@ -165,7 +168,7 @@ export default function Home({ navigation }) {
           </>
           :
           <>
-            <LoadingImage style={{ width: 180, height: 180 }} source={{ uri: 'https://img.icons8.com/color/452/valorant.png' }} />
+            <LoadingImage style={{ width: 200, height: 200 }} source={load} />
           </>
         }
       </>
@@ -178,7 +181,10 @@ const Container = styled.SafeAreaView`
   flex: 1;
   background-color: #1B252D;
 `;
-const LoadingImage = styled.Image``
+const LoadingImage = styled.Image`
+  align-self: center;
+  top: 150px;
+`
 
 const Logo = styled.Image`
   width: 100px;
